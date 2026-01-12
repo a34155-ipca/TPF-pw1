@@ -1,91 +1,61 @@
-// reservas.js
-
-function calcularDias(dataInicio, dataFim) {
-  const inicio = new Date(dataInicio);
-  const fim = new Date(dataFim);
-  return (fim - inicio) / (1000 * 60 * 60 * 24);
-}
-
-// Preencher select de quartos
-function carregarQuartos() {
-  const select = document.getElementById("selectQuarto");
-  if (!select) return;
+function listarQuartos() {
+  const div = document.getElementById("lista-quartos");
+  div.innerHTML = "";
 
   quartos.forEach(q => {
-    const option = document.createElement("option");
-    option.value = q.id;
-    option.textContent = `${q.nome} (€${q.preco}/noite)`;
-    select.appendChild(option);
+    div.innerHTML += `
+      <div class="col-md-4">
+        <div class="card">
+          <h5>${q.nome}</h5>
+          <p>${q.preco}€ / noite</p>
+        </div>
+      </div>`;
   });
 }
 
-// Criar reserva
-function criarReserva(quartoId, dataInicio, dataFim) {
-  const quarto = quartos.find(q => q.id === quartoId);
-  const dias = calcularDias(dataInicio, dataFim);
+function carregarSelectQuartos() {
+  const select = document.getElementById("quarto-id");
+  quartos.forEach(q => {
+    select.innerHTML += `<option value="${q.id}">${q.nome}</option>`;
+  });
+}
 
-  if (!quarto || dias <= 0) {
-    alert("Dados inválidos");
-    return;
-  }
+document.getElementById("form-reserva")?.addEventListener("submit", e => {
+  e.preventDefault();
 
-  const reserva = {
-    id: proximoIdReserva++,
+  const quartoId = Number(document.getElementById("quarto-id").value);
+  const entrada = document.getElementById("data-entrada").value;
+  const saida = document.getElementById("data-saida").value;
+
+  const dias = calcularDias(entrada, saida);
+  const preco = quartos.find(q => q.id === quartoId).preco;
+
+  reservas.push({
+    id: gerarId(),
+    cliente: document.getElementById("cliente-nome").value,
     quartoId,
-    dataInicio,
-    dataFim,
-    dias,
-    total: dias * quarto.preco
-  };
+    entrada,
+    saida,
+    valor: dias * preco
+  });
 
-  reservas.push(reserva);
-  renderizarReservas();
-}
+  listarReservas();
+});
 
-// Anular reserva
-function anularReserva(id) {
-  reservas = reservas.filter(r => r.id !== id);
-  renderizarReservas();
-}
+function listarReservas() {
+  const div = document.getElementById("lista-reservas");
+  if (!div) return;
 
-// Renderizar tabela de reservas
-function renderizarReservas() {
-  const tabela = document.getElementById("tabelaReservas");
-  if (!tabela) return;
-
-  tabela.innerHTML = "";
-
+  div.innerHTML = "";
   reservas.forEach(r => {
-    const quarto = quartos.find(q => q.id === r.quartoId);
-
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${r.id}</td>
-      <td>${quarto.nome}</td>
-      <td>${r.dataInicio}</td>
-      <td>${r.dataFim}</td>
-      <td>${r.dias}</td>
-      <td>€${r.total}</td>
-      <td>
-        <button onclick="anularReserva(${r.id})">Anular</button>
-      </td>
-    `;
-    tabela.appendChild(tr);
+    div.innerHTML += `
+      <p>${r.cliente} – ${r.valor}€
+      <button onclick="cancelarReserva(${r.id})">❌</button></p>`;
   });
 }
 
-// Evento do botão
-document.addEventListener("DOMContentLoaded", () => {
-  carregarQuartos();
-
-  const btn = document.getElementById("btnReservar");
-  if (btn) {
-    btn.addEventListener("click", () => {
-      const quartoId = Number(document.getElementById("selectQuarto").value);
-      const inicio = document.getElementById("dataInicio").value;
-      const fim = document.getElementById("dataFim").value;
-
-      criarReserva(quartoId, inicio, fim);
-    });
-  }
-});
+function cancelarReserva(id) {
+  const index = reservas.findIndex(r => r.id === id);
+  reservas.splice(index, 1);
+  listarReservas();
+}
