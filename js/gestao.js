@@ -1,17 +1,17 @@
 function totalFaturado() {
-  return reservas.reduce((t, r) => t + r.valor, 0);
+  return reservas.reduce((total, r) => total + r.valor, 0);
 }
 
 function diasReservados() {
-  return reservas.reduce((t, r) => {
-    return t + calcularDias(r.entrada, r.saida);
+  return reservas.reduce((total, r) => {
+    return total + calcularDias(r.entrada, r.saida);
   }, 0);
 }
 
 function atualizarDashboard() {
-  document.getElementById("total-faturado").innerText =
-    totalFaturado() + " €";
+  const total = document.getElementById("total-faturado");
+  const dias = document.getElementById("dias-reservados");
 
-  document.getElementById("dias-reservados").innerText =
-    diasReservados();
+  if (total) total.innerText = formatarMoeda(totalFaturado());
+  if (dias) dias.innerText = diasReservados();
 }
