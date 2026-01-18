@@ -1,0 +1,129 @@
+:root {
+    --gold: #d4af37;
+    --gold-hover: #b8960c;
+    --dark-bg: #0a0a0a;
+    --deep-blue: #1a2a3a;
+}
+
+body {
+    background-color: var(--dark-bg);
+    color: #e0e0e0;
+    font-family: 'Inter', sans-serif;
+    scroll-behavior: smooth;
+}
+
+h1, h2, h3, .navbar-brand {
+    font-family: 'Playfair Display', serif;
+}
+
+/* Hero Design */
+.hero-section {
+    height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.hero-bg {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    object-fit: cover;
+    z-index: -2;
+}
+
+.overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.4), var(--dark-bg));
+    z-index: -1;
+}
+
+.text-gold { color: var(--gold); }
+.tracking-widest { letter-spacing: 5px; }
+
+/* Vitrine de Quartos */
+.room-card {
+    background: #111;
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 0;
+    overflow: hidden;
+    transition: all 0.5s ease;
+}
+
+.room-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--gold);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+}
+
+.room-card img {
+    height: 400px;
+    object-fit: cover;
+    transition: 0.8s transform;
+}
+
+.room-card:hover img {
+    transform: scale(1.1);
+}
+
+.price-tag {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+/* Glassmorphism e Custom Forms */
+.card-glass {
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 30px;
+}
+
+.form-control-custom {
+    background: rgba(255,255,255,0.05);
+    border: none;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    border-radius: 0;
+    color: white;
+    padding: 12px 0;
+    width: 100%;
+    transition: 0.3s;
+}
+
+.form-control-custom:focus {
+    outline: none;
+    border-bottom-color: var(--gold);
+    background: rgba(255,255,255,0.08);
+}
+
+.label-gold {
+    color: var(--gold);
+    font-size: 0.7rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.btn-gold {
+    background: var(--gold);
+    color: black;
+    border-radius: 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.8rem;
+}
+
+.btn-gold:hover {
+    background: var(--gold-hover);
+    color: white;
+}
+
+/* Utilities */
+.gold-divider {
+    width: 60px;
+    height: 3px;
+    background: var(--gold);
+}
