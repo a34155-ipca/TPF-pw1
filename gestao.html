@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestão | Hotel Manager</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+<nav class="navbar navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="index.html">Hotel Manager</a>
+  </div>
+</nav>
+
+<div class="container my-5">
+  <h2 class="mb-4 text-center">Painel de Gestão – 2026</h2>
+
+  <div class="row g-4 text-center">
+    <div class="col-md-6">
+      <div class="card shadow p-4">
+        <h5>Total Faturado</h5>
+        <h2 class="text-success" id="total-faturado">0 €</h2>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card shadow p-4">
+        <h5>Dias Reservados</h5>
+        <h2 class="text-primary" id="dias-reservados">0</h2>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="bg-dark text-white text-center p-3">
+  © 2026 Hotel Manager
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/gestao.js"></script>
+<script>
+  atualizarDashboard();
+</script>
+
+</body>
+</html>

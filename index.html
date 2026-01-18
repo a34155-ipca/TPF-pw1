@@ -1,13 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <title>Hotel 2025</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
-    Gerenciador hotelgit 
-    aaaaaa
-    Gerenciador hotelhdausdahsdiashddsuaodhadhasoidhasoidhasdiohasdiohasdioahsdoiahsdoihasodihasdoiashdiosa
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="#">Hotel Manager</a>
+    <div>
+      <a href="reservas.html" class="btn btn-outline-light me-2">Reservas</a>
+      <a href="gestao.html" class="btn btn-outline-light">Gestão</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero text-white text-center">
+  <div class="container">
+    <h1 class="display-4 fw-bold">Bem-vindo ao Hotel Manager</h1>
+    <p class="lead">Aqui você pode gerenciar suas reservas e visualizar informações sobre o hotel.</p>
+  </div>
+</header>
+
+<!-- QUARTOS -->
+<section class="container my-5">
+  <h2 class="text-center mb-4">Quartos Disponíveis</h2>
+  <div id="lista-quartos" class="row g-4"></div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-dark text-white text-center p-3">
+  © 2026 Hotel Manager • Projeto Académico
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/reservas.js"></script>
+<script>
+  listarQuartos();
+</script>
+
 </body>
 </html>
