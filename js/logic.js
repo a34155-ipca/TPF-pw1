@@ -1,27 +1,22 @@
 const HotelLogic = {
-    calcularFaturamentoTotal() {
-        return hotelData.reservas.reduce((acc, res) => acc + res.total, 0);
+    calcularTotal(quartoId, noites) {
+        const q = hotelData.quartos.find(x => x.id == quartoId);
+        return q ? q.preco * noites : 0;
     },
 
-    getFaturamentoMensal() {
-        const meses = new Array(12).fill(0);
-        hotelData.reservas.forEach(res => {
-            meses[res.mes - 1] += res.total;
-        });
-        return meses;
-    },
-
-    adicionarReserva(nome, qId, mes, dias) {
-        const quarto = hotelData.quartos.find(q => q.id == qId);
-        const nova = {
+    adicionarReserva(dados) {
+        const total = this.calcularTotal(dados.quartoId, dados.noites);
+        const q = hotelData.quartos.find(x => x.id == dados.quartoId);
+        
+        const novaReserva = {
             id: Date.now(),
-            hospede: nome,
-            quartoId: parseInt(qId),
-            mes: parseInt(mes),
-            dias: parseInt(dias),
-            total: quarto.preco * dias
+            ...dados,
+            quartoNome: q.tipo,
+            valorTotal: total
         };
-        hotelData.reservas.push(nova);
+        
+        hotelData.reservas.push(novaReserva);
+        return novaReserva;
     },
 
     removerReserva(id) {

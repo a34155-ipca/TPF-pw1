@@ -3,105 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grand Horizon Luxury Resort | Reservas 2025</title>
+    <title>Grand Horizon | Gestão e Luxo</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
     <link rel="stylesheet" href="estilos/style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);">
         <div class="container">
             <a class="navbar-brand fw-bold" href="#">GRAND <span class="text-gold">HORIZON</span></a>
-            <div class="ms-auto d-flex align-items-center">
-                <a href="#meus-planos" class="btn btn-outline-light btn-sm me-3" id="btn-minhas-reservas">Minhas Estadias</a>
-                <button class="btn btn-gold px-4 shadow" onclick="document.getElementById('explore').scrollIntoView()">Reservar Agora</button>
+            <div class="ms-auto d-flex gap-2">
+                <button class="btn btn-outline-gold btn-sm" onclick="UI.toggleAdmin()">Gestão</button>
+                <button class="btn btn-gold btn-sm px-4" onclick="document.getElementById('explore').scrollIntoView({behavior:'smooth'})">RESERVAR</button>
             </div>
         </div>
     </nav>
 
     <header class="hero-section">
-        <div class="overlay"></div>
-        <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1920&q=80" class="hero-bg" alt="Luxury Hotel">
-        <div class="container hero-content text-center">
-            <h5 class="text-gold text-uppercase tracking-widest mb-3">Experiências Inesquecíveis 2025</h5>
-            <h1 class="display-1 fw-bold mb-4">A Arte de Viver Bem</h1>
-            <p class="lead mb-5 mx-auto" style="max-width: 600px;">Descubra o refúgio perfeito onde o luxo encontra a natureza. Planeie a sua estadia exclusiva para o próximo ano.</p>
-            <div class="scroll-indicator">
-                <span>Explore os nossos quartos</span>
-                <i class="bi bi-chevron-down d-block"></i>
-            </div>
+        <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1920&q=100" class="hero-bg">
+        <div class="container text-center" style="z-index: 10;">
+            <h1 class="display-1 fw-bold text-white" data-aos="fade-up">Grand <span class="text-gold">Horizon</span></h1>
+            <p class="lead text-white opacity-75" data-aos="fade-up" data-aos-delay="200">Experiências exclusivas, gestão inteligente.</p>
         </div>
     </header>
 
-    <section class="py-5" id="explore">
+    <section id="sessao-admin" class="py-5 d-none" style="background: #000;">
         <div class="container py-5">
-            <div class="text-center mb-5">
-                <h2 class="section-title">Nossas Acomodações</h2>
-                <div class="gold-divider mx-auto"></div>
-                <p class="text-muted mt-3">Cada detalhe foi desenhado para o seu conforto absoluto.</p>
+            <h2 class="text-gold fw-bold mb-4">Painel de Performance</h2>
+            <div class="row g-4 mb-5">
+                <div class="col-md-4">
+                    <div class="kpi-card text-center">
+                        <small class="text-gold">FATURAMENTO TOTAL</small>
+                        <h2 id="kpi-faturado" class="text-white mt-2">€ 0</h2>
+                    </div>
+                </div>
+                </div>
+            <div class="chart-container-wrapper p-4" style="background: #111; border-radius: 10px;">
+                <canvas id="faturamentoChart"></canvas>
             </div>
-            
-            <div class="row g-5" id="vitrine-quartos">
+        </div>
+    </section>
+
+    <section id="explore" class="py-5">
+        <div class="container py-5">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h2 class="text-white display-5 fw-bold">Nossas Suites</h2>
+                <div style="width: 50px; height: 2px; background: #d4af37; margin: 20px auto;"></div>
+            </div>
+            <div id="vitrine-quartos" class="row g-4">
                 </div>
         </div>
     </section>
 
-    <section class="py-5 bg-dark-deep d-none" id="sessao-cliente">
+    <section id="sessao-cliente" class="py-5 d-none" style="background: #0a0a0a;">
         <div class="container">
-            <div class="card-glass p-5">
-                <h3 class="mb-4"><i class="bi bi-person-circle me-3 text-gold"></i>As Suas Reservas Confirmadas</h3>
-                <div class="table-responsive">
-                    <table class="table table-dark table-borderless align-middle">
-                        <thead>
-                            <tr class="text-gold opacity-75">
-                                <th>ACOMODAÇÃO</th>
-                                <th>MÊS DE 2025</th>
-                                <th>ESTADIA</th>
-                                <th>INVESTIMENTO</th>
-                                <th class="text-end">GESTÃO</th>
-                            </tr>
-                        </thead>
-                        <tbody id="lista-cliente-reservas">
-                            </tbody>
-                    </table>
+            <h3 class="text-gold fw-bold mb-4">Suas Reservas</h3>
+            <div id="cards-reservas-cliente" class="row g-4">
                 </div>
-            </div>
         </div>
     </section>
 
     <div class="modal fade" id="modalReserva" tabindex="-1">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content border-0 overflow-hidden">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content bg-dark border-0">
                 <div class="row g-0">
-                    <div class="col-md-5 d-none d-md-block bg-cover" id="modal-img-quarto"></div>
-                    <div class="col-md-7 bg-dark p-5">
-                        <div class="modal-header border-0 p-0 mb-4">
-                            <h3 class="modal-title fw-bold" id="modal-titulo-quarto">Reserva Especial</h3>
+                    <div class="col-md-6 d-none d-md-block" id="modal-img-quarto" style="background-size: cover; background-position: center; min-height: 400px;"></div>
+                    <div class="col-md-6 p-5">
+                        <div class="d-flex justify-content-between mb-4">
+                            <h3 class="text-white fw-bold" id="modal-titulo-quarto">Reserva</h3>
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                         </div>
                         <form id="form-cliente-reserva">
-                            <div class="mb-4">
-                                <label class="label-gold">O SEU NOME COMPLETO</label>
-                                <input type="text" id="cli-nome" class="form-control-custom" placeholder="Como devemos chamá-lo?" required>
+                            <input type="hidden" id="cli-quarto-id">
+                            <div class="mb-3">
+                                <label class="text-gold small fw-bold">NOME DO HÓSPEDE</label>
+                                <input type="text" id="cli-nome" class="form-control-custom" required>
                             </div>
                             <div class="row mb-4">
                                 <div class="col-6">
-                                    <label class="label-gold">MÊS DE PREFERÊNCIA</label>
-                                    <input type="number" id="cli-mes" min="1" max="12" class="form-control-custom" value="1">
+                                    <label class="text-gold small fw-bold">MÊS DE 2026</label>
+<select id="cli-mes" class="form-control-custom">
+    <option value="1">Janeiro</option>
+    <option value="2">Fevereiro</option>
+    <option value="3">Março</option>
+    <option value="4">Abril</option>
+    <option value="5">Maio</option>
+    <option value="6">Junho</option>
+    <option value="7">Julho</option>
+    <option value="8">Agosto</option>
+    <option value="9">Setembro</option>
+    <option value="10">Outubro</option>
+    <option value="11">Novembro</option>
+    <option value="12">Dezembro</option>
+</select>
                                 </div>
                                 <div class="col-6">
-                                    <label class="label-gold">NOITES</label>
-                                    <input type="number" id="cli-noites" min="1" class="form-control-custom" value="1">
+                                    <label class="text-gold small fw-bold">NOITES</label>
+                                    <input type="number" id="cli-noites" min="1" value="1" class="form-control-custom">
                                 </div>
                             </div>
-                            <div class="price-calculator mb-4">
-                                <span class="text-muted small">Investimento Estimado:</span>
-                                <h2 class="text-gold fw-bold mb-0" id="preview-preco">€ 0,00</h2>
+                            <div class="text-center p-3 mb-4" style="background: rgba(255,255,255,0.05);">
+                                <small class="text-white-50">VALOR DA ESTADIA</small>
+                                <h2 class="text-gold fw-bold" id="preview-preco">€ 0</h2>
                             </div>
-                            <input type="hidden" id="cli-quarto-id">
-                            <button type="submit" class="btn btn-gold w-100 py-3 fw-bold">Confirmar Minha Estadia</button>
+                            <button type="submit" class="btn btn-gold w-100 py-3">CONFIRMAR AGORA</button>
                         </form>
                     </div>
                 </div>
@@ -109,13 +121,16 @@
         </div>
     </div>
 
-    <footer class="py-5 text-center text-muted bg-black">
-        <p>© 2025 Grand Horizon Luxury Resort. Todos os direitos reservados.</p>
-    </footer>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
     <script src="js/data.js"></script>
     <script src="js/logic.js"></script>
     <script src="js/main.js"></script>
+
+    <script>
+        // Inicializa as animações de scroll
+        AOS.init({ duration: 1000, once: true });
+    </script>
 </body>
 </html>

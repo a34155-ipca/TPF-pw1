@@ -1,126 +1,235 @@
+/**
+ * GRAND HORIZON - SISTEMA DE GESTÃO E RESERVAS 2026
+ * Desenvolvido para alta performance e interface de luxo.
+ */
+
+let faturamentoChart = null;
+
 const UI = {
+    // 1. INICIALIZAÇÃO DO SISTEMA
     init() {
+        console.log("Iniciando Grand Horizon System...");
         this.renderVitrine();
+        this.initChart();
         this.bindEvents();
-        this.updateHeader();
     },
 
+    // 2. ESCUTA DE EVENTOS (Cliques e Digitação)
     bindEvents() {
-        // Evento de cálculo em tempo real no modal
-        const calcInputs = ['cli-noites', 'cli-mes'];
-        calcInputs.forEach(id => {
-            document.getElementById(id).addEventListener('input', () => this.calcularPreview());
-        });
+        const form = document.getElementById('form-cliente-reserva');
+        if (form) {
+            form.onsubmit = (e) => {
+                e.preventDefault();
+                this.processarReserva();
+            };
+        }
 
-        // Formulário de Reserva
-        document.getElementById('form-cliente-reserva').onsubmit = (e) => {
-            e.preventDefault();
-            this.finalizarReserva();
-        };
+        // Atualiza o preço no modal enquanto o usuário muda as noites
+        const inputNoites = document.getElementById('cli-noites');
+        if (inputNoites) {
+            inputNoites.oninput = () => this.atualizarPrecoModal();
+        }
 
-        // Efeito Navbar no Scroll
-        window.addEventListener('scroll', () => {
-            const nav = document.getElementById('mainNav');
-            if (window.scrollY > 100) nav.style.background = '#0a0a0a';
-            else nav.style.background = 'transparent';
-        });
+        // Atualiza o preço se o usuário mudar o mês (caso haja variação futura)
+        const selectMes = document.getElementById('cli-mes');
+        if (selectMes) {
+            selectMes.onchange = () => this.atualizarPrecoModal();
+        }
     },
 
+    // 3. RENDERIZAR VITRINE DE QUARTOS
     renderVitrine() {
-        const vitrine = document.getElementById('vitrine-quartos');
-        vitrine.innerHTML = hotelData.quartos.map(q => `
-            <div class="col-md-6 col-lg-4">
-                <div class="room-card h-100">
-                    <div class="position-relative overflow-hidden">
-                        <img src="${q.img}" class="card-img-top" alt="${q.tipo}">
-                        <div class="position-absolute top-0 end-0 p-3">
-                            <span class="badge bg-gold text-dark p-2">TOP RATED</span>
-                        </div>
+        const container = document.getElementById('vitrine-quartos');
+        if (!container) return;
+
+        container.innerHTML = hotelData.quartos.map(q => `
+            <div class="col-md-4" data-aos="fade-up">
+                <div class="room-card">
+                    <div class="room-img-container">
+                        <img src="${q.img}" alt="${q.tipo}">
                     </div>
-                    <div class="card-body p-4 text-center">
-                        <h3 class="mb-3">${q.tipo}</h3>
-                        <p class="text-muted small mb-4">${q.desc}</p>
-                        <div class="d-flex justify-content-center gap-3 mb-4">
-                            ${q.tags.map(t => `<small class="text-gold border border-gold px-2 py-1">${t}</small>`).join('')}
-                        </div>
-                        <div class="price-tag text-white mb-4">€ ${q.preco} <small class="text-muted" style="font-size: 0.8rem">/ NOITE</small></div>
-                        <button onclick="UI.abrirReserva(${q.id})" class="btn btn-gold w-100 py-3">Explorar e Reservar</button>
+                    <div class="p-4 text-center">
+                        <h3 class="text-white h4 fw-bold">${q.tipo}</h3>
+                        <p style="color: #aaaaaa !important; font-size: 0.9rem; min-height: 45px;">${q.desc}</p>
+                        <div class="text-gold fs-4 fw-bold mb-4">€ ${q.preco.toLocaleString()} <span style="font-size: 0.8rem; opacity: 0.6">/ noite</span></div>
+                        <button onclick="UI.abrirModalReserva(${q.id})" class="btn btn-gold w-100 py-3">RESERVAR AGORA</button>
                     </div>
                 </div>
             </div>
         `).join('');
     },
 
-    abrirReserva(quartoId) {
-        const q = hotelData.quartos.find(item => item.id === quartoId);
+    // 4. LÓGICA DO MODAL DE RESERVA
+    abrirModalReserva(id) {
+        const q = hotelData.quartos.find(x => x.id == id);
+        if (!q) return;
+
+        document.getElementById('cli-quarto-id').value = q.id;
         document.getElementById('modal-titulo-quarto').innerText = q.tipo;
         document.getElementById('modal-img-quarto').style.backgroundImage = `url(${q.img})`;
-        document.getElementById('cli-quarto-id').value = q.id;
         
-        const modal = new bootstrap.Modal(document.getElementById('modalReserva'));
-        this.calcularPreview();
-        modal.show();
+        this.atualizarPrecoModal();
+        
+        const modalElement = new bootstrap.Modal(document.getElementById('modalReserva'));
+        modalElement.show();
     },
 
-    calcularPreview() {
+    atualizarPrecoModal() {
         const qId = document.getElementById('cli-quarto-id').value;
         const noites = document.getElementById('cli-noites').value;
-        const q = hotelData.quartos.find(item => item.id == qId);
+        const q = hotelData.quartos.find(x => x.id == qId);
         
-        if(q) {
-            const total = q.preco * noites;
-            document.getElementById('preview-preco').innerText = `€ ${total.toLocaleString()}`;
-        }
+        const total = q ? q.preco * noites : 0;
+        document.getElementById('preview-preco').innerText = `€ ${total.toLocaleString()}`;
     },
 
-    finalizarReserva() {
+    // 5. PROCESSAR A RESERVA (SALVAR E ATUALIZAR)
+    processarReserva() {
         const qId = document.getElementById('cli-quarto-id').value;
-        const q = hotelData.quartos.find(item => item.id == qId);
-        
+        const q = hotelData.quartos.find(x => x.id == qId);
+        const noites = document.getElementById('cli-noites').value;
+        const mes = document.getElementById('cli-mes').value;
+
         const novaReserva = {
             id: Date.now(),
             nome: document.getElementById('cli-nome').value,
-            quarto: q.tipo,
-            quartoId: qId,
-            mes: document.getElementById('cli-mes').value,
-            noites: document.getElementById('cli-noites').value,
-            total: q.preco * document.getElementById('cli-noites').value
+            quartoNome: q.tipo,
+            mes: parseInt(mes),
+            noites: parseInt(noites),
+            valorTotal: q.preco * noites
         };
 
+        // Adiciona aos dados globais
         hotelData.reservas.push(novaReserva);
+
+        // Atualiza a Interface
+        this.renderItinerario();
+        this.atualizarDashboard();
+
+        // Feedback visual e fechar modal
+        const sessaoCliente = document.getElementById('sessao-cliente');
+        sessaoCliente.classList.remove('d-none');
         
-        // UI Feedback
-        bootstrap.Modal.getInstance(document.getElementById('modalReserva')).hide();
-        document.getElementById('sessao-cliente').classList.remove('d-none');
-        this.renderReservasCliente();
-        document.getElementById('sessao-cliente').scrollIntoView();
+        const modalInstance = bootstrap.Modal.getInstance(document.getElementById('modalReserva'));
+        modalInstance.hide();
+
+        // Scroll suave para ver a reserva
+        setTimeout(() => sessaoCliente.scrollIntoView({ behavior: 'smooth' }), 400);
     },
 
-    renderReservasCliente() {
-        const lista = document.getElementById('lista-cliente-reservas');
-        lista.innerHTML = hotelData.reservas.map(res => `
-            <tr class="border-bottom border-white border-opacity-10">
-                <td>
-                    <div class="fw-bold">${res.quarto}</div>
-                    <small class="text-muted">Cód: #${res.id.toString().slice(-4)}</small>
-                </td>
-                <td><span class="badge bg-gold text-dark">Mês ${res.mes} / 2025</span></td>
-                <td>${res.noites} Noites</td>
-                <td class="text-gold fw-bold">€ ${res.total.toLocaleString()}</td>
-                <td class="text-end">
-                    <button onclick="UI.cancelar(${res.id})" class="btn btn-sm btn-link text-danger text-decoration-none">Anular Reserva</button>
-                </td>
-            </tr>
+    // 6. RENDERIZAR VOUCHERS DO CLIENTE
+    renderItinerario() {
+        const container = document.getElementById('cards-reservas-cliente');
+        if (!container) return;
+
+        container.innerHTML = hotelData.reservas.map(res => `
+            <div class="col-md-6 mb-4">
+                <div class="ticket-card" style="background: #111; border-left: 4px solid #d4af37; padding: 20px;">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h4 class="text-white fw-bold mb-1">${res.quartoNome}</h4>
+                            <p class="text-gold small mb-3">VOUCHER CONFIRMADO #2026-${res.id.toString().slice(-4)}</p>
+                        </div>
+                        <button onclick="UI.anularReserva(${res.id})" class="btn btn-outline-danger btn-sm">Anular</button>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <small style="color: #666; display: block;">HÓSPEDE</small>
+                            <span class="text-white">${res.nome}</span>
+                        </div>
+                        <div class="col-3">
+                            <small style="color: #666; display: block;">MÊS</small>
+                            <span class="text-white">${this.getNomeMes(res.mes)}</span>
+                        </div>
+                        <div class="col-3">
+                            <small style="color: #666; display: block;">NOITES</small>
+                            <span class="text-white">${res.noites}</span>
+                        </div>
+                    </div>
+                    <div class="mt-3 pt-3 border-top border-secondary text-end">
+                        <span class="fs-4 fw-bold text-white">€ ${res.valorTotal.toLocaleString()}</span>
+                    </div>
+                </div>
+            </div>
         `).join('');
     },
 
-    cancelar(id) {
-        if(confirm("Deseja realmente cancelar a sua estadia luxuosa connosco?")) {
+    anularReserva(id) {
+        if (confirm("Deseja anular esta reserva de luxo?")) {
             hotelData.reservas = hotelData.reservas.filter(r => r.id !== id);
-            this.renderReservasCliente();
-            if(hotelData.reservas.length === 0) document.getElementById('sessao-cliente').classList.add('d-none');
+            this.renderItinerario();
+            this.atualizarDashboard();
+            
+            if (hotelData.reservas.length === 0) {
+                document.getElementById('sessao-cliente').classList.add('d-none');
+            }
         }
+    },
+
+    // 7. PAINEL DE GESTÃO E GRÁFICOS (12 MESES)
+    initChart() {
+        const ctx = document.getElementById('faturamentoChart');
+        if (!ctx) return;
+
+        faturamentoChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                datasets: [{
+                    label: 'Faturamento Mensal 2026 (€)',
+                    data: Array(12).fill(0),
+                    borderColor: '#d4af37',
+                    backgroundColor: 'rgba(212, 175, 55, 0.1)',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { grid: { color: '#222' }, ticks: { color: '#fff' } },
+                    x: { ticks: { color: '#fff' } }
+                },
+                plugins: {
+                    legend: { labels: { color: '#fff' } }
+                }
+            }
+        });
+    },
+
+    atualizarDashboard() {
+        const total = hotelData.reservas.reduce((acc, r) => acc + r.valorTotal, 0);
+        const kpiFaturado = document.getElementById('kpi-faturado');
+        if (kpiFaturado) kpiFaturado.innerText = `€ ${total.toLocaleString()}`;
+
+        // Lógica de 12 meses para o gráfico
+        const dadosAnuais = Array(12).fill(0);
+        hotelData.reservas.forEach(r => {
+            const mesIndice = r.mes - 1;
+            dadosAnuais[mesIndice] += r.valorTotal;
+        });
+
+        if (faturamentoChart) {
+            faturamentoChart.data.datasets[0].data = dadosAnuais;
+            faturamentoChart.update();
+        }
+    },
+
+    toggleAdmin() {
+        const painel = document.getElementById('sessao-admin');
+        painel.classList.toggle('d-none');
+        if (!painel.classList.contains('d-none')) {
+            this.atualizarDashboard();
+            painel.scrollIntoView({ behavior: 'smooth' });
+        }
+    },
+
+    getNomeMes(num) {
+        const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+        return meses[num - 1];
     }
 };
 
-UI.init();
+// GARANTE QUE O SISTEMA SÓ RODA QUANDO O HTML ESTIVER PRONTO
+window.onload = () => UI.init();

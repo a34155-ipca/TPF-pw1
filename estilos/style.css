@@ -1,129 +1,186 @@
+:root { --gold: #d4af37; --gold-br: #f5df99; --dark: #0a0a0a; }
+body { background: var(--dark); color: #fff; font-family: 'Inter', sans-serif; }
+.text-gold { color: var(--gold); }
+.label-gold { color: var(--gold) !important; font-size: 0.7rem; font-weight: 800; letter-spacing: 2px; }
+
+/* Hero Fix */
+.hero-section { height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; }
+.hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; filter: brightness(0.4); }
+.hero-video-overlay { position: absolute; inset: 0; background: radial-gradient(circle, transparent, var(--dark)); z-index: -1; }
+
+/* Vitrine Fix */
+.room-card { background: #111; border: 1px solid rgba(255,255,255,0.1); transition: 0.4s; height: 100%; }
+.room-card:hover { transform: translateY(-10px); border-color: var(--gold); }
+/* 1. O container que segura a imagem */
+.room-img-container {
+    width: 100%;
+    height: 280px;      /* Altura fixa para manter o padrão */
+    overflow: hidden;    /* ESSENCIAL: corta tudo o que sair para fora */
+    position: relative;
+    background-color: #000;
+}
+
+/* 2. A imagem em estado normal */
+.room-img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;   /* Mantém a proporção sem distorcer */
+    transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1); /* Movimento suave e luxuoso */
+}
+
+/* 3. O efeito ao passar o mouse */
+.room-card:hover .room-img-container img {
+    transform: scale(1.1); /* Zoom de 10%, mas contido pelo 'overflow: hidden' acima */
+}
+
+/* OPCIONAL: Um leve filtro de brilho para dar vida à foto no hover */
+.room-card:hover .room-img-container img {
+    filter: brightness(1.1);
+}
+
+/* Form Fix (Fim das letras pretas) */
+.form-control-custom { background: #1a1a1a !important; color: #fff !important; border: 1px solid #333; padding: 12px; width: 100%; outline: none; }
+.form-control-custom:focus { border-color: var(--gold); }
+select.form-control-custom option { background: #1a1a1a; color: #fff; }
+
+/* KPI e Gestão */
+.kpi-card { background: #151515; padding: 30px; border: 1px solid rgba(212,175,55,0.1); }
+.kpi-card h2 { color: #fff; font-weight: 700; margin-top: 10px; }
+.chart-container-wrapper { background: #111; border-radius: 8px; margin-top: 20px; }
+
+/* Botões */
+.btn-gold { background: var(--gold); color: #000 !important; font-weight: 700; border: none; transition: 0.3s; }
+.btn-gold:hover { background: var(--gold-br); transform: scale(1.02); }
+.btn-outline-gold { border: 1px solid var(--gold); color: var(--gold); background: transparent; }
+
+.gold-divider { width: 60px; height: 3px; background: var(--gold); margin: 20px auto; }
+.bg-cover { background-size: cover; background-position: center; }
+/* DESIGN DO VOUCHER DE RESERVA */
+.ticket-card {
+    background: #161616;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-left: 5px solid var(--gold);
+    border-radius: 8px;
+    padding: 25px;
+    position: relative;
+    transition: 0.3s ease;
+    overflow: hidden;
+}
+
+.ticket-card:hover {
+    border-color: var(--gold);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+/* Garante que NENHUMA letra seja escura no fundo preto */
+.ticket-card h4, .ticket-card h5, .ticket-card p, .ticket-card span {
+    color: #ffffff !important; 
+}
+
+.ticket-card .text-muted {
+    color: #aaaaaa !important; /* Cinza claro para leitura suave */
+}
+
+.ticket-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(212, 175, 55, 0.1);
+    color: var(--gold) !important;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    border: 1px solid var(--gold);
+}
+
+/* Botão de Anular com Estilo */
+.btn-anular {
+    background: transparent;
+    color: #ff4d4d !important;
+    border: 1px solid #ff4d4d;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 6px 15px;
+    transition: 0.3s;
+    text-transform: uppercase;
+}
+
+.btn-anular:hover {
+    background: #ff4d4d;
+    color: #fff !important;
+}
+
+/* Divisor interno do voucher */
+.ticket-divider {
+    border-top: 1px dashed rgba(255,255,255,0.1);
+    margin: 15px 0;
+}
 :root {
     --gold: #d4af37;
-    --gold-hover: #b8960c;
-    --dark-bg: #0a0a0a;
-    --deep-blue: #1a2a3a;
+    --dark: #050505;
+    --card: #121212;
 }
 
-body {
-    background-color: var(--dark-bg);
-    color: #e0e0e0;
+body { 
+    background-color: var(--dark) !important; 
+    color: #ffffff !important; 
     font-family: 'Inter', sans-serif;
-    scroll-behavior: smooth;
+    margin: 0;
 }
 
-h1, h2, h3, .navbar-brand {
-    font-family: 'Playfair Display', serif;
+/* Forçar visibilidade de todas as fontes */
+h1, h2, h3, h4, h5, p, span, label, div {
+    color: #ffffff !important;
 }
+.text-gold { color: var(--gold) !important; }
 
-/* Hero Design */
+/* Hero Section Corrigida */
 .hero-section {
-    height: 100vh;
     position: relative;
+    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    overflow: hidden;
 }
-
 .hero-bg {
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
     object-fit: cover;
-    z-index: -2;
-}
-
-.overlay {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.4), var(--dark-bg));
     z-index: -1;
+    filter: brightness(0.3);
 }
 
-.text-gold { color: var(--gold); }
-.tracking-widest { letter-spacing: 5px; }
-
-/* Vitrine de Quartos */
+/* Vitrine de Suites */
 .room-card {
-    background: #111;
-    border: 1px solid rgba(255,255,255,0.05);
-    border-radius: 0;
-    overflow: hidden;
-    transition: all 0.5s ease;
-}
-
-.room-card:hover {
-    transform: translateY(-10px);
-    border-color: var(--gold);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-}
-
-.room-card img {
-    height: 400px;
-    object-fit: cover;
-    transition: 0.8s transform;
-}
-
-.room-card:hover img {
-    transform: scale(1.1);
-}
-
-.price-tag {
-    font-size: 1.5rem;
-    font-weight: 700;
-}
-
-/* Glassmorphism e Custom Forms */
-.card-glass {
-    background: rgba(255, 255, 255, 0.02);
-    backdrop-filter: blur(20px);
+    background: var(--card);
     border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 30px;
+    transition: 0.4s;
+    margin-bottom: 30px;
+}
+.room-card:hover { transform: translateY(-10px); border-color: var(--gold); }
+.room-img { height: 250px; width: 100%; object-fit: cover; }
+
+/* Painel de Gestão e Vouchers */
+.kpi-card { background: #1a1a1a; padding: 25px; border-bottom: 3px solid var(--gold); }
+.ticket-card {
+    background: #181818;
+    border-left: 5px solid var(--gold);
+    padding: 20px;
+    margin-bottom: 15px;
 }
 
+/* Formulários - Letras Brancas Garantidas */
 .form-control-custom {
-    background: rgba(255,255,255,0.05);
-    border: none;
-    border-bottom: 1px solid rgba(255,255,255,0.2);
-    border-radius: 0;
-    color: white;
-    padding: 12px 0;
+    background: #222 !important;
+    color: #fff !important;
+    border: 1px solid #444;
+    padding: 12px;
     width: 100%;
-    transition: 0.3s;
 }
+select.form-control-custom option { background: #222; color: #fff; }
 
-.form-control-custom:focus {
-    outline: none;
-    border-bottom-color: var(--gold);
-    background: rgba(255,255,255,0.08);
-}
-
-.label-gold {
-    color: var(--gold);
-    font-size: 0.7rem;
-    font-weight: bold;
-    letter-spacing: 1px;
-    display: block;
-    margin-bottom: 5px;
-}
-
-.btn-gold {
-    background: var(--gold);
-    color: black;
-    border-radius: 0;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    font-size: 0.8rem;
-}
-
-.btn-gold:hover {
-    background: var(--gold-hover);
-    color: white;
-}
-
-/* Utilities */
-.gold-divider {
-    width: 60px;
-    height: 3px;
-    background: var(--gold);
-}
+.btn-gold { background: var(--gold); color: #000 !important; font-weight: bold; border: none; padding: 10px 20px; }
+.btn-anular { color: #ff4d4d !important; border: 1px solid #ff4d4d; background: transparent; }
