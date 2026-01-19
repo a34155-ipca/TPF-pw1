@@ -184,3 +184,68 @@ select.form-control-custom option { background: #222; color: #fff; }
 
 .btn-gold { background: var(--gold); color: #000 !important; font-weight: bold; border: none; padding: 10px 20px; }
 .btn-anular { color: #ff4d4d !important; border: 1px solid #ff4d4d; background: transparent; }
+.feedback-card {
+    background: #1a1c20; /* Fundo cinza escuro dos cards */
+    padding: 40px;
+    border-radius: 8px;
+    height: 100%;
+    transition: transform 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.feedback-card:hover {
+    transform: translateY(-5px);
+    border-color: #d4af37;
+}
+
+.testimonial-text {
+    color: #e0e0e0 !important; /* Branco acinzentado para leitura suave */
+    font-style: italic;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 25px;
+    font-weight: 300;
+}
+
+.testimonial-author {
+    color: #d4af37 !important; /* Dourado para o nome */
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+}
+
+/* Ajuste para o título da seção */
+.text-gold {
+    color: #d4af37 !important;
+}
+/* Cards de Feedback Estilo Premium */
+.feedback-card {
+    background: #1c1f23; /* Cinza grafite profundo igual à imagem */
+    padding: 35px;
+    border-radius: 6px;
+    height: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    transition: all 0.3s ease;
+}
+
+.feedback-card:hover {
+    background: #24272c;
+    border-color: #d4af37;
+    transform: translateY(-5px);
+}
+
+.testimonial-text {
+    color: #cbd5e0 !important; /* Branco azulado/acinzentado para alta legibilidade */
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    font-weight: 400;
+}
+
+.testimonial-author {
+    color: #d4af37 !important; /* Dourado da marca */
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+}
