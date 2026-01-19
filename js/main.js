@@ -60,19 +60,33 @@ const UI = {
     },
 
     // 4. LÓGICA DO MODAL DE RESERVA
-    abrirModalReserva(id) {
-        const q = hotelData.quartos.find(x => x.id == id);
-        if (!q) return;
+   abrirModalReserva(quartoId) {
+    const quarto = hotelData.quartos.find(q => q.id === quartoId);
+    if (!quarto) return;
 
-        document.getElementById('cli-quarto-id').value = q.id;
-        document.getElementById('modal-titulo-quarto').innerText = q.tipo;
-        document.getElementById('modal-img-quarto').style.backgroundImage = `url(${q.img})`;
-        
-        this.atualizarPrecoModal();
-        
-        const modalElement = new bootstrap.Modal(document.getElementById('modalReserva'));
-        modalElement.show();
-    },
+    console.log("Tentando carregar imagem:", quarto.img); // Isso aparecerá no F12
+
+    document.getElementById("cli-quarto-id").value = quarto.id;
+    document.getElementById("modal-titulo-quarto").innerText = quarto.tipo;
+
+    const containerImg = document.getElementById("modal-img-quarto");
+    
+    if (containerImg) {
+        // Criamos a imagem e forçamos o estilo para garantir que ela preencha o espaço
+        containerImg.innerHTML = `
+            <img src="${quarto.img}" 
+                 style="width: 100%; height: 100%; object-fit: cover; display: block;" 
+                 onerror="this.src='https://via.placeholder.com/600x800?text=Erro+na+Imagem'">
+        `;
+    } else {
+        console.error("Erro: Não encontrei o elemento 'modal-img-quarto' no HTML.");
+    }
+
+    this.atualizarPrecoModal();
+
+    const modalElement = new bootstrap.Modal(document.getElementById('modalReserva'));
+    modalElement.show();
+},
 
     atualizarPrecoModal() {
         const qId = document.getElementById('cli-quarto-id').value;
